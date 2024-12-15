@@ -5,6 +5,7 @@ const cors = require("cors");
 const sequelize = require("./config/database");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/User"); 
+// const profileRoutes = require("./routes/profileRoutes")
 require("dotenv").config();
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use('/users', userRoutes);
+// app.use('/profile', profileRoutes);
 // Sync database
 sequelize.sync({ force: false }).then(() => {
   console.log("Database synced");
