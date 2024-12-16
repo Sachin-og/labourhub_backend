@@ -6,6 +6,7 @@ const sequelize = require("./config/database");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/User"); 
 const profileroute = require("./routes/profile");
+const postRoutes = require('./routes/postRoutes');
 require("dotenv").config();
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(bodyParser.json());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use('/users', userRoutes);
+app.use('/api/posts', postRoutes);
 app.use('/',profileroute);
 // Sync database
 sequelize.sync({alter:false, force: false }).then(() => {

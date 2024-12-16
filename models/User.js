@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 const { v4: uuidv4 } = require("uuid");
+const post = require("./Post")
 const User = sequelize.define("User", {
   id: {
     type: DataTypes.UUID,
@@ -67,5 +68,10 @@ const User = sequelize.define("User", {
   tableName: "Users", // Ensure it uses the existing table name
   timestamps: true,   // Ensure Sequelize respects the createdAt and updatedAt columns
 });
+
+User.hasMany(post, { foreignKey: 'userid' });
+
+// Define the reverse relationship: A Post belongs to a User
+post.belongsTo(User, { foreignKey: 'userid' });
 
 module.exports = User;
