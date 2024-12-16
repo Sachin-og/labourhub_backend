@@ -3,7 +3,7 @@
     "username": "sachin",
     "password": "sachin@147",
     "database": "labourhub",
-    "host": "localhost",
+    "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
