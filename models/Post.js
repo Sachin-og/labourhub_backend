@@ -14,8 +14,11 @@ const Post = sequelize.define('Post', {
     allowNull: false,
   },
   location: {
-    type: DataTypes.JSON,
+    type: DataTypes.STRING(2048), // Allows a URL of reasonable length
     allowNull: false,
+    validate: {
+      isURL: true, // Ensures that the input is a valid URL
+    },
   },
   isopened: {
     type: DataTypes.BOOLEAN,
