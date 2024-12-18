@@ -2,6 +2,38 @@ const express = require('express');
 const Post = require('../models/Post');
 const User = require('../models/User');
 const router = express.Router();
+const { Op } = require('sequelize'); // Import Op for query operators
+
+// Get Posts from Last 5 Days, Sorted by Recent
+router.get('/recent', async (req, res) => {
+  try {
+    const fiveDaysAgo = new Date();
+    fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5); // Subtract 5 days from today
+
+    const posts = await Post.findAll({
+      where: {
+        createdAt: {
+          [Op.gte]: fiveDaysAgo, // Fetch posts created after 'fiveDaysAgo'
+        },
+      },
+      include: {
+        model: User,
+        attributes: ['name', 'city'], // Include associated user details
+      },
+      order: [['createdAt', 'DESC']], // Order posts by creation date (recent first)
+    });
+
+    if (posts.length === 0) {
+      return res.status(404).json({ message: 'No recent posts found in the last 5 days.' });
+    }
+
+    res.status(200).json(posts);
+
+  } catch (error) {
+    console.error('Error fetching recent posts:', error);
+    res.status(500).json({ message: 'Error fetching recent posts', error: error.message });
+  }
+});
 
 // Create Post Route
 router.post('/create', async (req, res) => {
@@ -34,6 +66,34 @@ router.post('/create', async (req, res) => {
     return res.status(500).json({ message: 'Error creating post', error: error.message });
   }
 });
+
+
+// Get Post by ID
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      // Fetch the post by ID and include associated user details
+      const post = await Post.findOne({
+        where: { id },
+        include: {
+          model: User,
+          attributes: ['name', 'city'], // Include user name and city
+        },
+      });
+  
+      if (!post) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
+  
+      res.status(200).json(post);
+  
+    } catch (error) {
+      console.error('Error fetching post by ID:', error);
+      res.status(500).json({ message: 'Error fetching post', error: error.message });
+    }
+  });
+  
 
 // Delete Post Route (Now sets isOpen to false)
 router.delete('/delete/:id', async (req, res) => {

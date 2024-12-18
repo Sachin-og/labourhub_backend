@@ -7,6 +7,8 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/User"); 
 const profileroute = require("./routes/profile");
 const postRoutes = require('./routes/postRoutes');
+const searchRoutes = require('./routes/searchRoutes');
+const notificationRoutes = require('./routes/notificatioRoute');
 require("dotenv").config();
 
 const app = express();
@@ -23,6 +25,8 @@ app.use("/api/auth", authRoutes);
 app.use('/users', userRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/',profileroute);
+app.use('/search',searchRoutes);
+app.use('/notification', notificationRoutes);
 // Sync database
 sequelize.sync({alter:false, force: false }).then(() => {
   console.log("Database synced");

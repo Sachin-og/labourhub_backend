@@ -2,6 +2,11 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 const { v4: uuidv4 } = require("uuid");
 const post = require("./Post")
+const Notification = require('./Notification');
+
+// One user can have many notifications
+
+
 const User = sequelize.define("User", {
   id: {
     type: DataTypes.UUID,
@@ -70,8 +75,10 @@ const User = sequelize.define("User", {
 });
 
 User.hasMany(post, { foreignKey: 'userid' });
-
+User.hasMany(Notification, { foreignKey: 'user_id' });
 // Define the reverse relationship: A Post belongs to a User
 post.belongsTo(User, { foreignKey: 'userid' });
+Notification.belongsTo(User, { foreignKey: 'user_id' });
+
 
 module.exports = User;

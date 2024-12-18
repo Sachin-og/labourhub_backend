@@ -3,6 +3,9 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');  // Adjust the path as necessary
 const User = require('./User');
+const Notification = require('./Notification');
+
+
 const Post = sequelize.define('Post', {
   id: {
     type: DataTypes.UUID,
@@ -53,4 +56,8 @@ const Post = sequelize.define('Post', {
   timestamps: true,   // Automatically handles createdAt and updatedAt
 });
 
+
+// One post can have many notifications
+Post.hasMany(Notification, { foreignKey: 'post_id' });
+Notification.belongsTo(Post, { foreignKey: 'post_id' });
 module.exports = Post;
